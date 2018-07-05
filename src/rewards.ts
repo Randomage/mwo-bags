@@ -1,3 +1,4 @@
+import { List } from "immutable";
 
 export interface PremiumTime {
     type: "Premium Time";
@@ -29,3 +30,14 @@ export interface CockpitItem {
 }
 
 export type Reward = PremiumTime | MC | CBills | GXP | Consumable | CockpitItem;
+
+export type RewardTypes = Reward["type"];
+
+export interface RewardGroups {
+    CBills: List<CBills>;
+    PremiumTime: List<PremiumTime>;
+    Consumables: List<Consumable>;
+    GXP: List<GXP>;
+    CockpitItems: List<CockpitItem>;
+    MC: List<MC>;
+}
