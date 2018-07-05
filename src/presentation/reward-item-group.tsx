@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { hot } from "react-hot-loader";
 
 export interface RewardSummary {
@@ -16,21 +15,16 @@ export interface RewardItemGroupProps {
 
 const RewardItemGroupComponent: React.SFC<RewardItemGroupProps> = (rewardGroup: RewardItemGroupProps) => {
 
-    return <div className="reward">
-        <table>
-            <thead>
-                <tr>
-                    <td>{rewardGroup.rewardTypeName}</td>
-                    <td>{rewardGroup.rewardCount} bags</td>
-                </tr>
-            </thead>
+    return <div className="tile is-parent is-vertical">
+        <div className="tile is-child">
+            <p className="title is-size-5">{rewardGroup.rewardTypeName}</p>
+            <p className="subtitle is-size-6">
+                {rewardGroup.rewardCount} bag{rewardGroup.rewardCount === 1 ? "" : "s"}</p>
 
-            <tbody>
-                <tr>
-                    {rewardGroup.summaries.map((s) => [<td>{s.name}</td>, <td>{s.value} {s.suffix}</td>])}
-                </tr>
-            </tbody>
-        </table>
+            {rewardGroup.summaries
+                .sort((a, b) => a.name > b.name ? 1 : -1)
+                .map((s, i) => <p key={i}>{s.value.toLocaleString()} {s.suffix} {s.name}</p>)}
+        </div>
     </div>;
 };
 

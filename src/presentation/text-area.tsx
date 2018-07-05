@@ -5,14 +5,13 @@ import { hot } from "react-hot-loader";
 export interface TextAreaProps {
     label: string;
     text: string;
-    className: string;
     onTextChange: (value: string) => void;
 }
 
-const TextAreaComponent: React.SFC<TextAreaProps> = ({ label, text, onTextChange, className }) =>
+const TextAreaComponent: React.SFC<TextAreaProps> = ({ label, text, onTextChange }) =>
     <div className={"text-area"}>
         <label>{label}
-            <textarea value={text} onChange={(e) => onTextChange(e.target.value)} className={className}></textarea>
+            <textarea className="textarea" placeholder={label} value={text} onChange={(e) => onTextChange(e.target.value)}></textarea>
         </label>
     </div>;
 

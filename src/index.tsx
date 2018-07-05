@@ -1,4 +1,5 @@
 import "./style.css";
+import "bulma/css/bulma.css";
 
 import * as React from "react";
 
@@ -13,10 +14,35 @@ const store = createStore(rootReducer);
 
 render(
     <Provider store={store}>
-        <div className={"root"}>
-            <RewardInput></RewardInput>
-            <RewardGroupList></RewardGroupList>
-        </div>
+        <>
+            <section className="hero">
+                <div className="hero-body">
+                    <div className="container">
+                        <h1 className="title">
+                            MWO Bags
+                    </h1>
+                    </div>
+                </div>
+            </section>
+
+            <section className="section">
+                <div className="container">
+                    <h1 className="title">Summarise Bags</h1>
+                    <h2 className="subtitle">
+                        Paste your bags below
+                    </h2>
+                    <div className="columns">
+                        <div className="column reward-input">
+                            <RewardInput></RewardInput>
+                        </div>
+                        <div className="column">
+                            <RewardGroupList></RewardGroupList>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </>
     </Provider>,
-    document.getElementsByTagName("app-body")[0]
+    document.getElementsByTagName("body")[0]
 );

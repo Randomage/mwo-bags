@@ -8,7 +8,7 @@ import { inputChanged } from "../redux/input";
 import { parseRewards } from "../redux/rewards";
 
 const mapStateToProps = (state: RootState) => ({
-    label: "Paste your rewards list here",
+    label: "",
     text: state.input,
     className: "reward-input"
 });

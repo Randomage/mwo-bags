@@ -1,6 +1,7 @@
 import { List, Map } from "immutable";
 import { ActionType, createStandardAction, getType } from "typesafe-actions";
-import { MC, GXP, PremiumTime, CBills, Consumable, CockpitItem, Reward } from "../rewards";
+
+import { CBills, CockpitItem, Consumable, GXP, MC, PremiumTime, Reward } from "../rewards";
 
 export const parseRewards = createStandardAction("PARSE_REWARDS")<string>();
 
@@ -16,7 +17,7 @@ const parseInput: (s: string) => List<Reward> = (input: string) => {
         GXP: /^([0-9,])*? GXP$/,
         MC: /^([0-9,])*? MC$/,
         CockpitItem: /^Cockpit [A-z]*? - (.*?)$/,
-        Consumable: /(UAV)|(Artillery)|(Cool Shot)|(Air Strike)/
+        Consumable: /((UAV)|(Artillery)|(Cool Shot)|(Air Strike))/
     });
 
     const parseAmount: (match: RegExpMatchArray | null) => number =
@@ -30,6 +31,10 @@ const parseInput: (s: string) => List<Reward> = (input: string) => {
             .filter((r) => r == null ? false : r.match != null)
             .first())
         .map((r) => {
+            if (r == null) {
+                return null;
+            }
+
             switch (r.type) {
                 case "PremiumTime":
                     return {
@@ -51,6 +56,7 @@ const parseInput: (s: string) => List<Reward> = (input: string) => {
                         amount: parseAmount(r.match)
                     } as GXP;
                 case "Consumable":
+                    console.log(r);
                     return {
                         type: "Consumables",
                         name: r.match == null ? "Unknown" : r.match[1]
@@ -66,8 +72,6 @@ const parseInput: (s: string) => List<Reward> = (input: string) => {
             }
         })
         .filter((r) => r != null);
-
-    console.log(parts);
 
     return List<Reward>(parts);
 };

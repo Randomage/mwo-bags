@@ -14,7 +14,7 @@ module.exports = {
             title: 'Hello World',
             inject: false,
             template: require('html-webpack-template'),
-            bodyHtmlSnippet: '<app-body></app-body>'
+            headHtmlSnippet: '<meta name="viewport" content="width=device-width, initial-scale=1">'
         }),
         new webpack.NamedModulesPlugin()
     ],

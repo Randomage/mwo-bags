@@ -1,52 +1,11 @@
-body {
-    margin: 0;
-    overflow: hidden;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
-}
-
-.root {
-    display: flex;
+.reward-input {
+    display: flex !important;
 }
 
 .text-area {
-    width: 50vw;
-    padding: 1em;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-}
-
-.text-area label {
-    display: flex;
-    flex-direction: column;
     flex-grow: 1;
 }
 
-.text-area textarea {
-    flex-grow: 1;
-}
-
-.reward-list {
-    width: 50vw;
-    max-height: 100vh;
-    overflow: auto;
-}
-
-.reward:first-child {
-    margin-top: 1em;
-}
-
-.reward dl {
-    display: flex;
-    flex-direction: row;
-}
-
-.reward-list dt {
-    font-weight: bold;
-    min-width: 10%;
-}
-
-.reward-list dd {
-    width: 50%;
-    margin: 0;
+.text-area label, .text-area textarea {
+    height: 100%;
 }
