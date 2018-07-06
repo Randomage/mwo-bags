@@ -2,16 +2,12 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
-
 module.exports = {
     entry: ['./src/index'],
 
-    mode: 'development',
-    devtool: "source-map",
-
     plugins: [
         new HtmlWebpackPlugin({
-            title: 'Hello World',
+            title: 'MWO Bags',
             inject: false,
             template: require('html-webpack-template'),
             headHtmlSnippet: '<meta name="viewport" content="width=device-width, initial-scale=1">'
