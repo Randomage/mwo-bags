@@ -1,8 +1,12 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
-module.exports = merge(common, {
+module.exports = merge.smart(common, {
 
-    mode: 'production'
+    mode: 'production',
 
+    plugins: [
+        new OptimizeCssAssetsPlugin({})
+    ]
 });

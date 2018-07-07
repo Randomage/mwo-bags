@@ -1,7 +1,7 @@
-import "bulma/css/bulma.css";
+import "bulma/bulma.sass";
 
 import "./bulmaswatch.min.css";
-import "./style.css";
+import "./style.scss";
 
 import * as React from "react";
 import { render } from "react-dom";

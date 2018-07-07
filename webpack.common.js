@@ -37,10 +37,11 @@ module.exports = {
             // { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
 
             {
-                test: /\.css$/,
+                test: /\.(sc|sa|c)ss$/,
                 use: [
                     'style-loader',
-                    'css-loader'
+                    'css-loader',
+                    "sass-loader"
                 ]
             },
 
@@ -51,5 +52,5 @@ module.exports = {
                 ]
             }
         ]
-    },
+    }
 };
