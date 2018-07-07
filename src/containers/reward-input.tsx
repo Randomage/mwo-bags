@@ -1,14 +1,18 @@
-import { TextArea, TextAreaProps } from "../presentation/text-area";
-
-import { Dispatch } from "redux";
-import { RootState } from "../root-reducer";
-import { connect } from "react-redux";
 import { hot } from "react-hot-loader";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+
+import { TextArea } from "../presentation/text-area";
 import { inputChanged } from "../redux/input";
 import { parseRewards } from "../redux/rewards";
+import { RootState } from "../root-reducer";
 
 const mapStateToProps = (state: RootState) => ({
     label: "",
+    placeholder: `1
+62,500 C-Bills
+2
+...`,
     text: state.input,
     className: "reward-input"
 });

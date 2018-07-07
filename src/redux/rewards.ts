@@ -56,7 +56,6 @@ const parseInput: (s: string) => List<Reward> = (input: string) => {
                         amount: parseAmount(r.match)
                     } as GXP;
                 case "Consumable":
-                    console.log(r);
                     return {
                         type: "Consumables",
                         name: r.match == null ? "Unknown" : r.match[1]

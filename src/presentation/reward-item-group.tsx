@@ -16,7 +16,7 @@ export interface RewardItemGroupProps {
 const RewardItemGroupComponent: React.SFC<RewardItemGroupProps> = (rewardGroup: RewardItemGroupProps) => {
 
     return <div className="tile is-parent is-vertical">
-        <div className="tile is-child">
+        <div className="tile is-child box">
             <p className="title is-size-5">{rewardGroup.rewardTypeName}</p>
             <p className="subtitle is-size-6">
                 {rewardGroup.rewardCount} bag{rewardGroup.rewardCount === 1 ? "" : "s"}</p>
