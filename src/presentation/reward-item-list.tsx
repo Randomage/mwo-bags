@@ -1,9 +1,9 @@
-import * as React from "react";
-
 import { List } from "immutable";
+import * as React from "react";
+import { hot } from "react-hot-loader";
+
 import { Reward } from "../rewards";
 import { RewardItem } from "./reward-item";
-import { hot } from "react-hot-loader";
 
 export interface RewardItemListProps {
     rewards: List<Reward>;

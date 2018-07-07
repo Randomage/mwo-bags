@@ -12,7 +12,7 @@ const RewardItemGroupListComponent: React.SFC<RewardItemGroupListProps> = ({ rew
     const groupsHtml = rewardGroups
         .sort((a, b) => a.rewardTypeName > b.rewardTypeName ? 1 : -1)
         .map((g, i) => g == null ? null :
-            <div key={i} className="column is-narrow">
+            <div key={i} className={"column is-narrow fade " + (g.rewardCount === 0 ? "out" : "in")}>
                 <RewardItemGroup {...g}></RewardItemGroup>
             </div>
         );
