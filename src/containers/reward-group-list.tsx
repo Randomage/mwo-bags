@@ -1,12 +1,12 @@
-import { Reward, CBills, RewardGroups, CockpitItem, Consumable, GXP, MC, PremiumTime } from "../rewards";
-import { RewardItemGroupList, RewardItemGroupListProps } from "../presentation/reward-item-group-list";
-import { RewardItemGroupProps, RewardSummary } from "../presentation/reward-item-group";
-
-import { Dispatch } from "redux";
 import { List } from "immutable";
-import { RootState } from "../root-reducer";
-import { connect } from "react-redux";
 import { hot } from "react-hot-loader";
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+
+import { RewardItemGroupProps } from "../presentation/reward-item-group";
+import { RewardItemGroupList, RewardItemGroupListProps } from "../presentation/reward-item-group-list";
+import { CBills, CockpitItem, Consumable, GXP, MC, PremiumTime, Reward, RewardGroups, Unknown } from "../rewards";
+import { RootState } from "../root-reducer";
 
 const groupRewards: (r: List<Reward>) => RewardGroups = (rewards) => {
 
@@ -16,45 +16,43 @@ const groupRewards: (r: List<Reward>) => RewardGroups = (rewards) => {
         Consumables: List<Consumable>(),
         GXP: List<GXP>(),
         MC: List<MC>(),
-        PremiumTime: List<PremiumTime>()
+        PremiumTime: List<PremiumTime>(),
+        Unknown: List<Unknown>()
     };
 
     groups = rewards.reduce((g, r) => {
 
-        if (groups == null || r == null) {
-            return groups;
-        }
-
         switch (r.type) {
             case "CBills":
-                groups.CBills = groups.CBills.push(r);
+                g.CBills = groups.CBills.push(r);
                 break;
 
             case "Cockpit Items":
-                groups.CockpitItems = groups.CockpitItems.push(r);
+                g.CockpitItems = groups.CockpitItems.push(r);
                 break;
 
             case "Consumables":
-                groups.Consumables = groups.Consumables.push(r);
+                g.Consumables = groups.Consumables.push(r);
                 break;
 
             case "GXP":
-                groups.GXP = groups.GXP.push(r);
+                g.GXP = groups.GXP.push(r);
                 break;
 
             case "MC":
-                groups.MC = groups.MC.push(r);
+                g.MC = groups.MC.push(r);
                 break;
 
             case "Premium Time":
-                groups.PremiumTime = groups.PremiumTime.push(r);
+                g.PremiumTime = groups.PremiumTime.push(r);
                 break;
 
-            default:
+            case "Unknown":
+                g.Unknown = groups.Unknown.push(r);
                 break;
         }
 
-        return groups;
+        return g;
 
     }, groups);
 
@@ -69,7 +67,7 @@ const summariseRewards: (r: RewardGroups) => RewardItemGroupProps[] = (r) => {
             rewardCount: r.CBills.count(),
             summaries: [{
                 name: "Total",
-                value: r.CBills.reduce((total, c) => total == null || c == null ? 0 : total + c.amount, 0),
+                value: r.CBills.reduce((total, c) => total + c.amount, 0),
                 suffix: "CBills"
             }]
         },
@@ -78,7 +76,7 @@ const summariseRewards: (r: RewardGroups) => RewardItemGroupProps[] = (r) => {
             rewardCount: r.GXP.count(),
             summaries: [{
                 name: "Total",
-                value: r.GXP.reduce((total, c) => total == null || c == null ? 0 : total + c.amount, 0),
+                value: r.GXP.reduce((total, c) => total + c.amount, 0),
                 suffix: "GXP"
             }]
         },
@@ -87,7 +85,7 @@ const summariseRewards: (r: RewardGroups) => RewardItemGroupProps[] = (r) => {
             rewardCount: r.MC.count(),
             summaries: [{
                 name: "Total",
-                value: r.MC.reduce((total, c) => total == null || c == null ? 0 : total + c.amount, 0),
+                value: r.MC.reduce((total, c) => total + c.amount, 0),
                 suffix: "MC"
             }]
         },
@@ -104,31 +102,34 @@ const summariseRewards: (r: RewardGroups) => RewardItemGroupProps[] = (r) => {
             rewardTypeName: "Consumables",
             rewardCount: r.Consumables.count(),
             summaries: r.Consumables
-                .groupBy((c) => c == null ? null : c.name)
-                .map((g, k) => g == null || k == null ? {
-                    name: "",
-                    value: 0,
+                .groupBy((c) => c.name)
+                .map((g, k) => ({
+                    name: k,
+                    value: g.count(),
                     suffix: ""
-                } : {
-                        name: k,
-                        value: g.count(),
-                        suffix: ""
-                    }).toArray()
+                })).toList().toArray()
         },
         {
             rewardTypeName: "Cockpit Items",
             rewardCount: r.CockpitItems.count(),
             summaries: r.CockpitItems
-                .groupBy((c) => c == null ? null : c.name)
-                .map((g, k) => g == null || k == null ? {
-                    name: "",
-                    value: 0,
+                .groupBy((c) => c.name)
+                .map((g, k) => ({
+                    name: k,
+                    value: g.count(),
                     suffix: ""
-                } : {
-                        name: k,
-                        value: g.count(),
-                        suffix: ""
-                    }).toArray()
+                })).toList().toArray()
+        },
+        {
+            rewardTypeName: "Unknown?",
+            rewardCount: r.Unknown.count(),
+            summaries: r.Unknown
+                .groupBy((c) => c.rawValue)
+                .map((g, k) => ({
+                    name: k,
+                    value: g.count(),
+                    suffix: ""
+                })).toList().toArray()
         }
     ];
 };

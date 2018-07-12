@@ -29,7 +29,12 @@ export interface CockpitItem {
     name: string;
 }
 
-export type Reward = PremiumTime | MC | CBills | GXP | Consumable | CockpitItem;
+export interface Unknown {
+    type: "Unknown";
+    rawValue: string;
+}
+
+export type Reward = PremiumTime | MC | CBills | GXP | Consumable | CockpitItem | Unknown;
 
 export type RewardTypes = Reward["type"];
 
@@ -40,4 +45,5 @@ export interface RewardGroups {
     GXP: List<GXP>;
     CockpitItems: List<CockpitItem>;
     MC: List<MC>;
+    Unknown: List<Unknown>;
 }

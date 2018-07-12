@@ -11,10 +11,8 @@ const mapStateToProps = (state: RootState) => ({
     label: "",
     placeholder: `1
 62,500 C-Bills
-2
-...`,
-    text: state.input,
-    className: "reward-input"
+2...`,
+    text: state.input
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => (
