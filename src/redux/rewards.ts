@@ -1,7 +1,7 @@
 import { List, Map } from "immutable";
 import { ActionType, createStandardAction, getType } from "typesafe-actions";
 
-import { Reward, RewardTypes } from "../rewards";
+import { Reward, RewardType } from "../rewards";
 
 export const parseRewards = createStandardAction("PARSE_REWARDS")<string>();
 
@@ -10,115 +10,99 @@ export type RewardsActions = ActionType<typeof parseRewards>;
 interface RewardPattern {
     type: Reward["type"];
     pattern: RegExp;
+    createReward: (value: string, match: RegExpMatchArray) => Reward;
 }
 
 const initialState = List<Reward>();
 
 const parseInput: (s: string) => List<Reward> = (input: string) => {
 
-    const patterns = List<RewardPattern>([
-        { type: "Premium Time", pattern: /^(1) Day Active Premium Time$/ },
-        { type: "CBills", pattern: /^([0-9,])*? C-Bills$/ },
-        { type: "GXP", pattern: /^([0-9,])*? GXP$/ },
-        { type: "MC", pattern: /^([0-9,])*? MC$/ },
-        { type: "Cockpit Items", pattern: /^Cockpit [A-z]*? - (.*?)$/ },
-        { type: "Consumables", pattern: /((UAV)|(Artillery)|(Cool Shot)|(Air Strike))/ }
-    ]);
-
     const parseAmount: (match: RegExpMatchArray) => number =
         (m) => parseInt(m[0].replace(",", ""), 10);
 
-    const getMatchingPattern = (value: string) => {
+    const patterns = List<RewardPattern>([
+        {
+            type: "Premium Time",
+            pattern: /^(1) Day Active Premium Time$/,
+            createReward: (v, m) => ({
+                type: "Premium Time"
+            })
+        },
+        {
+            type: "CBills",
+            pattern: /^([0-9,])*? C-Bills$/,
+            createReward: (v, m) => ({
+                type: "CBills",
+                amount: parseAmount(m)
+            })
+        },
+        {
+            type: "GXP",
+            pattern: /^([0-9,])*? GXP$/,
+            createReward: (v, m) => ({
+                type: "GXP",
+                amount: parseAmount(m)
+            })
+        },
+        {
+            type: "MC",
+            pattern: /^([0-9,])*? MC$/,
+            createReward: (v, m) => ({
+                type: "MC",
+                amount: parseAmount(m)
+            })
+        },
+        {
+            type: "Cockpit Items",
+            pattern: /^Cockpit [A-z]*? - (.*?)$/,
+            createReward: (v, m) => ({
+                type: "Cockpit Items",
+                name: m[1]
+            })
+        },
+        {
+            type: "Consumables",
+            pattern: /((UAV)|(Artillery)|(Cool Shot)|(Air Strike))/,
+            createReward: (v, m) => ({
+                type: "Consumables",
+                name: m[1]
+            })
+        }
+    ]);
 
-        const matchingPattern =
+    const toReward = (value: string) => {
+
+        const patternMatch =
             patterns
                 .map((p) => ({
-                    value,
-                    type: p.type,
+                    pattern: p,
                     match: value.match(p.pattern) as RegExpMatchArray
                 }))
                 .filter((r) => r.match != null)
                 .first();
 
-        if (matchingPattern == null) {
-            const unknownValue: {
-                value: string,
-                type: "Unknown",
-                match: RegExpMatchArray
-            } = {
-                value,
-                type: "Unknown",
-                match: value.match(/.*/) as RegExpMatchArray
+        if (patternMatch == null) {
+
+            const noMatch: Reward = {
+                rawValue: value,
+                type: "Unknown"
             };
 
-            return unknownValue;
+            return noMatch;
         }
 
-        return matchingPattern;
+        return patternMatch.pattern.createReward(value, patternMatch.match);
     };
 
-    const parts = input
+    const notOnlyNumbers = (s: string) => !/^[0-9]{1,}$/.test(s);
+
+    const rewards = input
         .split(/\n/)
         .map((s) => s.trim())
-        .filter((s) => !/^[0-9]{1,}$/.test(s))
-        .map((s) => getMatchingPattern(s))
-        .map((r) => {
+        .filter(notOnlyNumbers)
+        .map(toReward);
 
-            let result: Reward;
-
-            switch (r.type) {
-                case "Premium Time":
-                    result = {
-                        type: "Premium Time"
-                    };
-                    break;
-
-                case "CBills":
-                    result = {
-                        type: "CBills",
-                        amount: parseAmount(r.match)
-                    };
-                    break;
-
-                case "MC":
-                    result = {
-                        type: "MC",
-                        amount: parseAmount(r.match)
-                    };
-                    break;
-
-                case "GXP":
-                    result = {
-                        type: "GXP",
-                        amount: parseAmount(r.match)
-                    };
-                    break;
-
-                case "Consumables":
-                    result = {
-                        type: "Consumables",
-                        name: r.match == null ? "Unknown" : r.match[1]
-                    };
-                    break;
-
-                case "Cockpit Items":
-                    result = {
-                        type: "Cockpit Items",
-                        name: r.match == null ? "Unknown" : r.match[1]
-                    };
-                    break;
-
-                default:
-                    result = {
-                        type: "Unknown",
-                        rawValue: r.value
-                    };
-            }
-
-            return result;
-        });
-
-    return List<Reward>(parts);
+    return List<Reward>(rewards);
 };
 
 export default function reducer(state: List<Reward> = initialState, action: RewardsActions) {

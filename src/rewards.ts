@@ -1,5 +1,3 @@
-import { List } from "immutable";
-
 export interface PremiumTime {
     type: "Premium Time";
 }
@@ -36,14 +34,6 @@ export interface Unknown {
 
 export type Reward = PremiumTime | MC | CBills | GXP | Consumable | CockpitItem | Unknown;
 
-export type RewardTypes = Reward["type"];
+export type RewardType = Reward["type"];
 
-export interface RewardGroups {
-    CBills: List<CBills>;
-    PremiumTime: List<PremiumTime>;
-    Consumables: List<Consumable>;
-    GXP: List<GXP>;
-    CockpitItems: List<CockpitItem>;
-    MC: List<MC>;
-    Unknown: List<Unknown>;
-}
+export type RewardOfType<T extends RewardType, U extends Reward = Reward> = U extends { type: T } ? U : never;

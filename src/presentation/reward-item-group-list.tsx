@@ -10,11 +10,10 @@ export interface RewardItemGroupListProps {
 const RewardItemGroupListComponent: React.SFC<RewardItemGroupListProps> = ({ rewardGroups }) => {
 
     const groupsHtml = rewardGroups
-        .sort((a, b) => a.rewardTypeName > b.rewardTypeName ? 1 : -1)
-        .map((g, i) => g == null ? null :
-            <div key={i} className={"column is-narrow fade " + (g.rewardCount === 0 ? "out" : "in")}>
-                <RewardItemGroup {...g}></RewardItemGroup>
-            </div>
+        .sort((a, b) => a.name > b.name ? 1 : -1)
+        .map((g, i) => <div key={i} className={"column is-narrow fade " + (g.rewardCount === 0 ? "out" : "in")}>
+            <RewardItemGroup {...g}></RewardItemGroup>
+        </div>
         );
 
     return <div className="columns is-multiline is-centered">
