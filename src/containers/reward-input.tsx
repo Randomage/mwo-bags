@@ -9,9 +9,8 @@ import { RootState } from "../root-reducer";
 
 const mapStateToProps = (state: RootState) => ({
     label: "",
-    placeholder: `1
-62,500 C-Bills
-2...`,
+    placeholder: `1 62,500 C-Bills
+2 ...`,
     text: state.input
 });
 

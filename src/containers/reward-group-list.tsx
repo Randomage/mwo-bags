@@ -10,6 +10,7 @@ import { RootState } from "../root-reducer";
 export interface RewardSummaryItem {
     name: string;
     rewardCount: number;
+    proportion: number;
 }
 
 export interface RewardSummary {
@@ -20,12 +21,15 @@ export interface RewardSummary {
 }
 
 const groupRewards = (rewards: List<Reward>) => {
-
     return rewards.groupBy((r) => r.type);
 };
 
-const summarise: (type: RewardType, rewards: List<Reward>) => RewardSummary =
-    (type: RewardType, rewards: List<Reward>) => {
+const calculateProportion = (count: number, totalCount: number) => {
+    return count / totalCount;
+};
+
+const summarise: (type: RewardType, rewards: List<Reward>, proportion: (count: number) => number) => RewardSummary =
+    (type: RewardType, rewards: List<Reward>, proportion: (count: number) => number) => {
 
         switch (type) {
             case "CBills":
@@ -37,13 +41,15 @@ const summarise: (type: RewardType, rewards: List<Reward>) => RewardSummary =
                 return {
                     name: type,
                     rewardCount: rewards.count(),
+                    proportion: proportion(rewardsWithAmount.count()),
                     summary: `${rewardsWithAmount.reduce((total, c) => total + c.amount, 0).toLocaleString()} ${type}`,
                     breakdown: rewardsWithAmount
-                        .sortBy((r) => -r.amount)
+                        .sortBy((r) => r.amount)
                         .groupBy((r) => r.amount)
                         .map((r, amount) => ({
                             name: `${amount.toLocaleString()} ${type}`,
-                            rewardCount: r.count()
+                            rewardCount: r.count(),
+                            proportion: proportion(r.count())
                         }))
                         .toList()
                         .toArray()
@@ -57,12 +63,14 @@ const summarise: (type: RewardType, rewards: List<Reward>) => RewardSummary =
                 return {
                     name: type as string,
                     rewardCount: rewards.count(),
+                    proportion: proportion(rewardsWithName.count()),
                     summary: `${rewardsWithName.count().toLocaleString()} ${type}`,
                     breakdown: rewardsWithName
                         .groupBy((r) => r.name)
                         .map((r, name) => ({
                             name,
-                            rewardCount: r.count()
+                            rewardCount: r.count(),
+                            proportion: proportion(r.count())
                         }))
                         .toList()
                         .sortBy((r) => r.name)
@@ -74,8 +82,18 @@ const summarise: (type: RewardType, rewards: List<Reward>) => RewardSummary =
                 return {
                     name: type as string,
                     rewardCount: rewards.count(),
+                    proportion: proportion(rewards.count()),
                     summary: `${rewards.count().toLocaleString()} Days of ${type}`,
-                    breakdown: []
+                    breakdown: rewards
+                        .groupBy((r) => "1 Day of Premium Time")
+                        .map((r, name) => ({
+                            name,
+                            rewardCount: r.count(),
+                            proportion: proportion(r.count())
+                        }))
+                        .toList()
+                        .sortBy((r) => r.name)
+                        .toArray()
                 };
 
             case "Unknown":
@@ -89,7 +107,8 @@ const summarise: (type: RewardType, rewards: List<Reward>) => RewardSummary =
                         .groupBy((r) => r.rawValue)
                         .map((r, rawValue) => ({
                             name: rawValue,
-                            rewardCount: r.count()
+                            rewardCount: r.count(),
+                            proportion: proportion(unknownRewards.count())
                         }))
                         .toList()
                         .sortBy((r) => r.name)
@@ -108,7 +127,7 @@ const summarise: (type: RewardType, rewards: List<Reward>) => RewardSummary =
 
 const mapStateToProps: (s: RootState) => RewardItemGroupListProps = (state: RootState) => ({
     rewardGroups: groupRewards(state.rewards)
-        .map((g, k) => summarise(k, g.toList()))
+        .map((g, k) => summarise(k, g.toList(), (c) => calculateProportion(c, state.rewards.count())))
         .toList()
         .toArray()
 });

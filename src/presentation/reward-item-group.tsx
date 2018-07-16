@@ -23,7 +23,9 @@ const RewardItemGroupComponent: React.SFC<RewardItemGroupProps> = (rewardSummary
 
         return breakdown.map((s) => <div className="level breakdown-item">
             <div className="level-left breakdown-name">{s.name}</div>
-            <div className="level-right">x{s.rewardCount}</div>
+            <div className="level-right">x{s.rewardCount}&nbsp;
+                <span className="has-text-grey-light">({(s.proportion * 100).toFixed(1)}%)</span>
+            </div>
         </div>);
     };
 
