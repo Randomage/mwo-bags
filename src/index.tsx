@@ -11,6 +11,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 
 import { RewardGroupList } from "./containers/reward-group-list";
 import { RewardInput } from "./containers/reward-input";
+import { RewardSummary } from "./containers/reward-summary";
 import { rootReducer } from "./root-reducer";
 
 const store = createStore(rootReducer,
@@ -33,6 +34,7 @@ render(
             </section>
 
             <section className="section">
+
                 <div className="container">
                     <div className="columns is-centered">
                         <div className="column reward-input">
@@ -41,9 +43,18 @@ render(
                     </div>
                 </div>
 
-                <div className="container">
-                    <RewardGroupList></RewardGroupList>
-                </div>
+            </section>
+
+            <section className="section">
+
+                <RewardSummary></RewardSummary>
+
+            </section>
+
+            <section className="section">
+
+                <RewardGroupList></RewardGroupList>
+
             </section>
 
         </>

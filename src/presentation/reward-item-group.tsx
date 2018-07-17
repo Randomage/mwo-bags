@@ -1,23 +1,11 @@
 import * as React from "react";
 import { hot } from "react-hot-loader";
 
-import { RewardSummary, RewardSummaryItem } from "../containers/reward-group-list";
+import { RewardSummary, RewardSummaryItem } from "../redux/rewards";
 
 export type RewardItemGroupProps = RewardSummary;
 
 const RewardItemGroupComponent: React.SFC<RewardItemGroupProps> = (rewardSummary: RewardItemGroupProps) => {
-
-    const renderSummary = (summary: string | undefined, breakdown: RewardSummaryItem[]) => {
-
-        if (summary) {
-            return <div>
-                <p className="has-text-info"> {summary}</p>
-                {breakdown.length > 0 ? <hr /> : <></>}
-            </div>;
-        }
-
-        return <></>;
-    };
 
     const renderBreakdown = (breakdown: RewardSummaryItem[]) => {
 
@@ -36,7 +24,7 @@ const RewardItemGroupComponent: React.SFC<RewardItemGroupProps> = (rewardSummary
                 {rewardSummary.rewardCount} bag{rewardSummary.rewardCount === 1 ? "" : "s"}
             </p>
 
-            {renderSummary(rewardSummary.summary, rewardSummary.breakdown)}
+            <hr />
 
             <div className="content">
                 {renderBreakdown(rewardSummary.breakdown)}

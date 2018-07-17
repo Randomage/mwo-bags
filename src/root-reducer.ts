@@ -1,5 +1,6 @@
-import { StateType } from "typesafe-actions";
 import { combineReducers } from "redux";
+import { StateType } from "typesafe-actions";
+
 import { default as input } from "./redux/input";
 import { default as rewards } from "./redux/rewards";
 
