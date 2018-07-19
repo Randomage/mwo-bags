@@ -87,12 +87,12 @@ const toReward = (value: string) => {
 
 export const parseRewardString: (s: string) => List<Reward> = (input: string) => {
 
-    const notOnlyNumbers = (s: string) => !/^[0-9]{1,}$/.test(s);
+    const notOnlyNumbersOrEmpty = (s: string) => s.length > 0 && !/^[0-9]{1,}$/.test(s);
 
     const rewards = input
         .split(/\n/)
         .map((s) => s.trim())
-        .filter(notOnlyNumbers)
+        .filter(notOnlyNumbersOrEmpty)
         .map(toReward);
 
     return List<Reward>(rewards);
