@@ -1,7 +1,7 @@
 import * as React from "react";
 import { hot } from "react-hot-loader";
 
-import { RewardSummary, RewardSummaryItem } from "../redux/rewards";
+import { RewardSummary, RewardSummaryItem } from "../rewards/summarise-rewards";
 
 export type RewardItemGroupProps = RewardSummary;
 

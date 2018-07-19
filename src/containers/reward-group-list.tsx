@@ -1,10 +1,8 @@
-import { List } from "immutable";
 import { hot } from "react-hot-loader";
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
 
 import { RewardItemGroupList, RewardItemGroupListProps } from "../presentation/reward-item-group-list";
-import { Reward, RewardOfType, RewardType } from "../rewards";
 import { RootState } from "../root-reducer";
 
 const mapStateToProps: (s: RootState) => RewardItemGroupListProps = (state: RootState) => ({
