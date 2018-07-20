@@ -5,6 +5,7 @@
     "private": true,
     "scripts": {
         "build": "webpack --config webpack.prod.js",
+        "build:analyse": "webpack --config webpack.prod-analyse.js",
         "start": "webpack-dev-server --open --hot --config webpack.dev.js",
         "test": "jest",
         "test:watch": "npm test -- --watch"
@@ -44,6 +45,7 @@
         "ts-jest": "^22.4.6",
         "typescript": "^2.8.3",
         "webpack": "^4.15.1",
+        "webpack-bundle-analyzer": "^2.13.1",
         "webpack-cli": "^2.1.3",
         "webpack-dev-server": "^3.1.4"
     },
