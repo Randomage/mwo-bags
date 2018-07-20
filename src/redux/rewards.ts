@@ -20,7 +20,7 @@ const initialState = {
 };
 
 const groupRewards = (rewards: List<Reward>) => {
-    return rewards.groupBy((r) => r.type);
+    return rewards.groupBy(r => r.type);
 };
 
 const calculateProportion = (count: number, totalCount: number) => {
@@ -28,16 +28,14 @@ const calculateProportion = (count: number, totalCount: number) => {
 };
 
 export default function reducer(state: ParsedRewards = initialState, action: RewardsActions) {
-
     switch (action.type) {
         case getType(parseRewards):
-
             const rewards = parseRewardString(action.payload);
 
             return {
                 rewards,
                 rewardSummaries: groupRewards(rewards)
-                    .map((g, k) => summariseRewards(k, g.toList(), (c) => calculateProportion(c, rewards.count())))
+                    .map((g, k) => summariseRewards(k, g.toList(), c => calculateProportion(c, rewards.count())))
                     .toList()
             };
 

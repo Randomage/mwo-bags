@@ -14,8 +14,7 @@ import { RewardInput } from "./containers/reward-input";
 import { RewardSummary } from "./containers/reward-summary";
 import { rootReducer } from "./root-reducer";
 
-const store = createStore(rootReducer,
-    composeWithDevTools(applyMiddleware()));
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware()));
 
 render(
     <Provider store={store}>
@@ -23,40 +22,29 @@ render(
             <section className="hero">
                 <div className="hero-body">
                     <div className="container">
-                        <h1 className="title">
-                            MWO Bags
-                    </h1>
-                        <h2 className="subtitle">
-                            Paste your bags below
-                    </h2>
+                        <h1 className="title">MWO Bags</h1>
+                        <h2 className="subtitle">Paste your bags below</h2>
                     </div>
                 </div>
             </section>
 
             <section className="section">
-
                 <div className="container">
                     <div className="columns is-centered">
                         <div className="column reward-input">
-                            <RewardInput></RewardInput>
+                            <RewardInput />
                         </div>
                     </div>
                 </div>
-
             </section>
 
             <section className="section">
-
-                <RewardSummary></RewardSummary>
-
+                <RewardSummary />
             </section>
 
             <section className="section">
-
-                <RewardGroupList></RewardGroupList>
-
+                <RewardGroupList />
             </section>
-
         </>
     </Provider>,
     document.getElementsByTagName("body")[0]

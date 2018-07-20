@@ -8,8 +8,7 @@ interface RewardPattern {
     createReward: (value: string, match: RegExpMatchArray) => Reward;
 }
 
-const parseAmount: (match: RegExpMatchArray) => number =
-    (m) => parseInt(m[0].replace(",", ""), 10);
+const parseAmount: (match: RegExpMatchArray) => number = m => parseInt(m[0].replace(",", ""), 10);
 
 const patterns = List<RewardPattern>([
     {
@@ -62,18 +61,15 @@ const patterns = List<RewardPattern>([
 ]);
 
 const toReward = (value: string) => {
-
-    const patternMatch =
-        patterns
-            .map((p) => ({
-                pattern: p,
-                match: value.match(p.pattern) as RegExpMatchArray
-            }))
-            .filter((r) => r.match != null)
-            .first();
+    const patternMatch = patterns
+        .map(p => ({
+            pattern: p,
+            match: value.match(p.pattern) as RegExpMatchArray
+        }))
+        .filter(r => r.match != null)
+        .first();
 
     if (patternMatch == null) {
-
         const noMatch: Reward = {
             rawValue: value,
             type: "Unknown"
@@ -86,12 +82,11 @@ const toReward = (value: string) => {
 };
 
 export const parseRewardString: (s: string) => List<Reward> = (input: string) => {
-
     const notOnlyNumbersOrEmpty = (s: string) => s.length > 0 && !/^[0-9]{1,}$/.test(s);
 
     const rewards = input
         .split(/\n/)
-        .map((s) => s.trim())
+        .map(s => s.trim())
         .filter(notOnlyNumbersOrEmpty)
         .map(toReward);
 

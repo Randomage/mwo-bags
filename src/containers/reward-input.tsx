@@ -14,14 +14,12 @@ const mapStateToProps = (state: RootState) => ({
     text: state.input
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => (
-    {
-        onTextChange: (value: string) => {
-            dispatch(inputChanged(value));
-            dispatch(parseRewards(value));
-        }
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    onTextChange: (value: string) => {
+        dispatch(inputChanged(value));
+        dispatch(parseRewards(value));
     }
-);
+});
 
 const RewardInputComponent = connect(
     mapStateToProps,

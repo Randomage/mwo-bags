@@ -9,9 +9,7 @@ const mapStateToProps: (s: RootState) => RewardItemGroupListProps = (state: Root
     rewardGroups: state.rewards.rewardSummaries.toArray()
 });
 
-const mapDispatchToProps = (dispatch: Dispatch) => (
-    {}
-);
+const mapDispatchToProps = (dispatch: Dispatch) => ({});
 
 const RewardGroupListComponent = connect(
     mapStateToProps,
