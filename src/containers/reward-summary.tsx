@@ -6,7 +6,10 @@ import { Summary } from "../presentation/summary";
 import { RootState } from "../root-reducer";
 
 const mapStateToProps = (state: RootState) => ({
-    items: state.rewards.rewardSummaries.map(s => ({ name: s.name, value: s.summary })).toArray()
+    items: state.rewards.rewardSummaries
+        .map(s => ({ name: s.name, value: s.summary }))
+        .sortBy(s => s.name)
+        .toArray()
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({});
