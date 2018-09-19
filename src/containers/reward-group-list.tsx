@@ -6,7 +6,7 @@ import { RewardItemGroupList, RewardItemGroupListProps } from "../presentation/r
 import { RootState } from "../root-reducer";
 
 const mapStateToProps: (s: RootState) => RewardItemGroupListProps = (state: RootState) => ({
-    rewardGroups: state.rewards.rewardSummaries.toArray()
+    rewardGroups: state.rewards.rewardSummaries.sortBy(s => s.name).toArray()
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({});
