@@ -8,19 +8,19 @@ interface RewardPattern {
     createReward: (value: string, match: RegExpMatchArray) => Reward;
 }
 
-const parseAmount: (match: RegExpMatchArray) => number = m => parseInt(m[0].replace(",", ""), 10);
+const parseAmount: (match: RegExpMatchArray) => number = m => parseInt(m[2].replace(",", ""), 10);
 
 const patterns = List<RewardPattern>([
     {
         type: "Premium Time",
-        pattern: /^(1) Day Active Premium Time$/,
+        pattern: /(Premium Time: )?(1) Day Active Premium Time/,
         createReward: (v, m) => ({
             type: "Premium Time"
         })
     },
     {
         type: "CBills",
-        pattern: /^([0-9,])*? C-Bills$/,
+        pattern: /(C-?Bills: )?([0-9,]{1,}) C-?Bills/,
         createReward: (v, m) => ({
             type: "CBills",
             amount: parseAmount(m)
@@ -28,7 +28,7 @@ const patterns = List<RewardPattern>([
     },
     {
         type: "GXP",
-        pattern: /^([0-9,])*? GXP$/,
+        pattern: /(GXP: )?([0-9,]{1,}) GXP/,
         createReward: (v, m) => ({
             type: "GXP",
             amount: parseAmount(m)
@@ -36,7 +36,7 @@ const patterns = List<RewardPattern>([
     },
     {
         type: "MC",
-        pattern: /^([0-9,])*? MC$/,
+        pattern: /(MC: )?([0-9,]{1,}) MC/,
         createReward: (v, m) => ({
             type: "MC",
             amount: parseAmount(m)
@@ -44,10 +44,10 @@ const patterns = List<RewardPattern>([
     },
     {
         type: "Cockpit Items",
-        pattern: /^Cockpit [A-z]*? - (.*?)$/,
+        pattern: /(Cockpit Items: )?Cockpit [A-z]*? - (.*?)$/,
         createReward: (v, m) => ({
             type: "Cockpit Items",
-            name: m[1]
+            name: m[2]
         })
     },
     {
@@ -83,12 +83,14 @@ const toReward = (value: string) => {
 
 export const parseRewardString: (s: string) => List<Reward> = (input: string) => {
     const notOnlyNumbersOrEmpty = (s: string) => s.length > 0 && !/^[0-9]{1,}$/.test(s);
+    const notUnknown = (r: Reward) => r.type !== "Unknown";
 
     const rewards = input
         .split(/\n/)
         .map(s => s.trim())
         .filter(notOnlyNumbersOrEmpty)
-        .map(toReward);
+        .map(toReward)
+        .filter(notUnknown);
 
     return List<Reward>(rewards);
 };
